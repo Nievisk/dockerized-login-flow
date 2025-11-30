@@ -7,10 +7,21 @@ services:
     depends_on:
       - postgres
     ports:
-      - 3000:3000 
+      - 3000:3000
       - 51212:51212
     volumes:
       - ./backend:/app
+      - /app/node_modules
+
+  frontend:
+    container_name: frontend
+    build: ./frontend
+    depends_on:
+      - backend
+    ports:
+      - 5173:5173
+    volumes:
+      - ./frontend:/app
       - /app/node_modules
 
   postgres:
