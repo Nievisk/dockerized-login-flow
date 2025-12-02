@@ -1,6 +1,6 @@
 import z from "zod";
 
-export const registerSchema = z.object({
+export const signUpSchema = z.object({
   first_name: z
     .string()
     .min(3, "Min 3 chars")
