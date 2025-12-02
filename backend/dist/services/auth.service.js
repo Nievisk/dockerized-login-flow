@@ -47,11 +47,10 @@ let AuthService = class AuthService {
         await this.mailer.send({ ...newUser, token });
     }
     async login(data) {
-        var _a;
         const existing = await this.prisma.user.findUnique({
             where: { email: data.email }
         });
-        const matches = this.hash.compareData((_a = existing === null || existing === void 0 ? void 0 : existing.hashed_pass) !== null && _a !== void 0 ? _a : "", data.password);
+        const matches = this.hash.compareData(data.password, (existing === null || existing === void 0 ? void 0 : existing.hashed_pass) || "");
         if (!(existing === null || existing === void 0 ? void 0 : existing.is_valid) || !matches)
             throw new common_1.UnauthorizedException("Incorrect email or password");
         const accessToken = this.jwt.create(existing.id, existing.is_valid);
@@ -67,10 +66,14 @@ let AuthService = class AuthService {
         });
     }
     async findUser(id) {
-        return await this.prisma.user.findUnique({
+        const user = await this.prisma.user.findUnique({
             where: { id },
-            select: { first_name: true }
+            select: {
+                first_name: true,
+                last_name: true
+            }
         });
+        return { username: `${user === null || user === void 0 ? void 0 : user.first_name} ${user === null || user === void 0 ? void 0 : user.last_name}` };
     }
 };
 exports.AuthService = AuthService;

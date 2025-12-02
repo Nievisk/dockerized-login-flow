@@ -52,7 +52,7 @@ export class AuthService {
       where: { email: data.email }
     });
 
-    const matches = this.hash.compareData(existing?.hashed_pass ?? "", data.password)
+    const matches = this.hash.compareData(data.password, existing?.hashed_pass || "")
 
     if (!existing?.is_valid || !matches) throw new UnauthorizedException("Incorrect email or password");
 
@@ -72,9 +72,14 @@ export class AuthService {
   }
 
   async findUser(id: string) {
-    return await this.prisma.user.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: { id },
-      select: { first_name: true }
+      select: {
+        first_name: true,
+        last_name: true
+      }
     })
+
+    return { username: `${user?.first_name} ${user?.last_name}` }
   }
 }

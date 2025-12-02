@@ -1,19 +1,22 @@
 import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useSearchParams } from "react-router-dom"
 
 export const ValidatePage = () => {
     const [statusCode, setStatusCode] = useState<number>()
     const navigate = useNavigate()
+
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get("token")
 
     const handleUserValidation = async () => {
         const url = import.meta.env.URL || 'http://localhost:3000/auth/validate'
 
         const res = await fetch(url, {
             method: "PUT",
-            headers: { "authoriazation": `bearer ` }
+            headers: { "Authorization": `Bearer ${token}` }
         })
 
-        if (res.ok) navigate("/")
+        if (res.ok) navigate("/auth/login")
 
         setStatusCode(res.status)
     }

@@ -12,7 +12,7 @@ export const EmailSentPage = () => {
                     <p className="text-gray-600 text-sm">Follow the instructions to continue.</p>
 
                     <Link
-                        to="/sign-in"
+                        to="/auth/sign-in"
                         className="inline-block mt-4 px-6 py-3 rounded-xl shadow bg-blue-600 text-white hover:bg-blue-700 transition"
                     >
                         Go to sign in
